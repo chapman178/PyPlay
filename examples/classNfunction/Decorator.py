@@ -1,13 +1,23 @@
 
+def my_decorator( func ):
+    def onCall( *args, **kwargs):
+        print("myDecorator: before {}".format(func.__name__))
+        rc = func( *args, **kwargs)
+        print("myDecorator: after {}".format(func.__name__))
+        return rc
+    return onCall
+
+
+
 class myDecorator( object ):
     def __init__(self,  f ):
         self.f = f
     def __call__(self):
         print("myDecorator: before myFunction()")
-        self.f()
+        self.f(self)
         print("myDecorator: after myFunction()")
 
-@myDecorator
+@my_decorator
 def my_function():
     print("inside my_function()")
 
@@ -20,9 +30,9 @@ class MyClass():
     def __str__(self):
         return'my str has this message,  Hello'
 
-    @staticmethod
-    @myDecorator
-    def my_method():
+    # @staticmethod
+    @my_decorator
+    def my_method(self):
         print('inside mymethod')
         return
 
